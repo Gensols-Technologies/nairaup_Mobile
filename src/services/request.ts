@@ -1,14 +1,15 @@
 import axios from "axios";
-import { API_BASE_URL } from "src/constants/app.constants";
+import { Platform } from "react-native";
 import * as Device from "expo-device";
 import { Toast } from "toastify-react-native";
 import { NetworkResponse } from "src/types/request.types";
-import { API_BEARER_TOKEN } from "@env";
+import Constants from "expo-constants";
 
-axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.timeout = 60 * 1000;
 
 export const buildHeader = async (isDefaultAuth?: boolean): Promise<any> => {
+  const API_BEARER_TOKEN = Constants.expoConfig?.extra?.API_BEARER_TOKEN || "";
+  
   const headers = {
     "Content-Type": "application/json",
     "Cache-Control": "no-cache",
@@ -151,6 +152,25 @@ export async function requestClan({
       "Content-Type": contentType,
     });
 
+  // Get API base URL dynamically at request time
+  // On Android, 'localhost' refers to the device itself — use 10.0.2.2 for emulator
+  // or the machine's LAN IP for a physical device.
+  const getRawBaseUrl = (): string => {
+    if (__DEV__) {
+      const devUrl: string =
+        Constants.expoConfig?.extra?.API_DEV_URL || "http://10.0.2.2:3335/api/v1";
+      if (Platform.OS === "android") {
+        // Replace localhost / 127.0.0.1 with 10.0.2.2 for Android emulator
+        return devUrl.replace(/(localhost|127\.0\.0\.1)/, "10.0.2.2");
+      }
+      return devUrl;
+    }
+    return (
+      Constants.expoConfig?.extra?.API_PROD_URL || "https://api.nairaup.com/api/v1"
+    );
+  };
+  const API_BASE_URL = getRawBaseUrl();
+  
   if (__DEV__)
     console.log(
       "✅ Making axios request",
@@ -158,6 +178,7 @@ export async function requestClan({
       type,
       queryParams,
       pathParams,
+      API_BASE_URL,
       route,
       routePlusParams,
     );
@@ -168,7 +189,7 @@ export async function requestClan({
   };
   try {
     const response = await axios({
-      url: routePlusParams.trim(),
+      url: `${API_BASE_URL}${routePlusParams.trim()}`,
       method: type,
       data: transformedData,
       headers,

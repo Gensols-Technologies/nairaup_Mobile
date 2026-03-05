@@ -30,7 +30,11 @@ const useAuth = () => {
       status === Notifications.PermissionStatus.GRANTED &&
       IsEmail(data.username)
     ) {
-      OneSignal.login(data.username);
+      try {
+        OneSignal.login(data.username);
+      } catch (error) {
+        console.log("⚠️ OneSignal login error (not critical):", error);
+      }
     }
     dispatch(populateUserData(data));
   };
@@ -84,7 +88,11 @@ const useAuth = () => {
     if (request.code === 201) {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status === Notifications.PermissionStatus.GRANTED && data.email) {
-        OneSignal.login(data.email);
+        try {
+          OneSignal.login(data.email);
+        } catch (error) {
+          console.log("⚠️ OneSignal login error (not critical):", error);
+        }
       }
     }
     return request;
@@ -137,7 +145,7 @@ const useAuth = () => {
   ): Promise<NetworkResponse> => {
     setLoading(true);
     const request: NetworkResponse = await requestClan({
-      route: `auth/reset/password`,
+      route: `/auth/reset/password`,
       type: "POST",
       data,
     });

@@ -21,9 +21,10 @@ export default function OTPVerificationScreen({
   route,
 }: RootStackScreenProps<"OTPVerificationScreen">) {
   const { theme } = useAppTheme();
-  const email = route.params.email;
-  const mobile = route.params.mobile;
-  const isEmail = route.params.isEmail;
+  const email = route.params?.email || "";
+  const mobile = route.params?.mobile || "";
+  const isEmail = route.params?.isEmail ?? true;
+  const isPasswordReset = route.params?.isPasswordReset ?? false;
   const [otp, setOtp] = useState("");
   const [counter, setCounter] = useState(0);
   const [verifyError, setVerifyError] = useState("");
@@ -45,7 +46,7 @@ export default function OTPVerificationScreen({
     await requestOTP({
       email: isEmail ? email : undefined,
       mobile: !isEmail ? mobile : undefined,
-      ispasswordreset: route.params.isPasswordReset,
+      ispasswordreset: isPasswordReset,
     });
     startCount(60);
   };
@@ -53,8 +54,8 @@ export default function OTPVerificationScreen({
   const doVerify = async () => {
     const req = await verifyOTP({
       otp,
-      email: route.params.isEmail ? route.params.email : undefined,
-      mobile: !route.params.isEmail ? route.params.mobile : undefined,
+      email: isEmail ? email : undefined,
+      mobile: !isEmail ? mobile : undefined,
     });
 
     if (req.code === 200) {
@@ -62,7 +63,7 @@ export default function OTPVerificationScreen({
       setVerifyError("");
       setAttemptCount(0);
       navigation.navigate(
-        route.params.isPasswordReset
+        isPasswordReset
           ? "ResetPasswordScreen"
           : "AccountSuccessScreen",
       );
@@ -111,8 +112,9 @@ export default function OTPVerificationScreen({
   };
 
   useEffect(() => {
-    // Auto-request OTP when screen mounts
-    doRequestNewOTP();
+    // Start the countdown timer for "Resend" button
+    // OTP was already sent before navigating to this screen
+    startCount(60);
   }, []);
 
   useEffect(() => {

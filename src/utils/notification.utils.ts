@@ -70,11 +70,26 @@ export const PushNotificationSetup = () => {
   const notificationListener = useRef<Notifications.EventSubscription>(null);
   const responseListener = useRef<Notifications.EventSubscription>(null);
 
+  // Initialize OneSignal
+  useEffect(() => {
+    const initializeOneSignal = async () => {
+      try {
+        if (ONESIGNAL_APP_ID) {
+          OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+          OneSignal.initialize(ONESIGNAL_APP_ID);
+          console.log("✅ OneSignal initialized successfully");
+        }
+      } catch (error) {
+        console.log("⚠️ OneSignal initialization error:", error);
+      }
+    };
+    initializeOneSignal();
+  }, []);
+
   useEffect(() => {
     if (expoPushToken && expoPushToken !== "") {
-      // OneSignal.Debug.setLogLevel(LogLevel.Verbose);
-      // OneSignal.initialize(`${ONESIGNAL_APP_ID}`);
-      // console.log(expoPushToken)
+      // Console logging for debug
+      console.log("✅ Expo push token saved:", expoPushToken);
       SecureStoreManager.saveItemToSecureStore(
         `${APP_EXPO_PUSH_TOKEN}`,
         expoPushToken,

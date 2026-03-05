@@ -4,11 +4,15 @@ import { RootStackScreenProps } from "src/types/navigation.types";
 import { Image, SafeAreaView, Text } from "src/components/themed.components";
 import fontUtils from "src/utils/font.utils";
 import { Button } from "src/components/buttons.components";
+import { useAppSelector } from "src/hooks/useReduxHooks";
 
 export default function AccountSuccessScreen({
   navigation,
   route,
 }: RootStackScreenProps<"AccountSuccessScreen">) {
+  const user = useAppSelector((state) => state.auth.user);
+  const firstName = user?.profile?.firstname || "User";
+
   return (
     <SafeAreaView style={[styles.container]}>
       <Image
@@ -26,12 +30,15 @@ export default function AccountSuccessScreen({
         Account Creation Successful!
       </Text>
       <Text mb={fontUtils.h(30)} align="center">
-        Welcome Mercy, your account with NairaUp has been created successfully.
-        Log in now to access all our services!
+        Welcome {firstName}, your account with NairaUp has been created
+        successfully. Log in now to access all our services!
       </Text>
       <Button
         title="Proceed to Log In"
-        onPress={() => navigation.popTo("LoginScreen")}
+        onPress={() => navigation.reset({
+          index: 0,
+          routes: [{ name: "LoginScreen" }],
+        })}
         mb={fontUtils.h(20)}
         mt={fontUtils.h(30)}
       />

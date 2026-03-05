@@ -21,10 +21,16 @@ export const useGoogle = () => {
       setLoading(true);
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      const pushnotificationtoken =
+      let pushnotificationtoken =
         (await SecureStoreManager.getItemFromSecureStore(
           `${APP_EXPO_PUSH_TOKEN}`,
         )) || "";
+      
+      // Validate push token - if it's an error message, use empty string
+      if (pushnotificationtoken.includes("Error") || pushnotificationtoken.includes("not initialized")) {
+        pushnotificationtoken = "";
+      }
+      
       const request: NetworkResponse = await requestClan({
         route: `/auth/google`,
         type: "POST",

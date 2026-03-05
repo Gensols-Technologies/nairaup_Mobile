@@ -11,7 +11,7 @@ module.exports = {
   slug: "nairaup",
   version: "0.0.1",
   orientation: "portrait",
-  icon: "./src/assets/images/icon.jpg",
+  icon: "./src/assets/images/icon.png",
   scheme: "nairaup",
   userInterfaceStyle: "automatic",
   splash: {
@@ -36,7 +36,7 @@ module.exports = {
   android: {
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
     adaptiveIcon: {
-      foregroundImage: "./src/assets/images/adaptive-icon.jpg",
+      foregroundImage: "./src/assets/images/adaptive-icon.png",
       backgroundColor: "#FFF"
     },
     package: "com.nairaup.app",
@@ -50,9 +50,9 @@ module.exports = {
     API_BEARER_TOKEN: process.env.API_BEARER_TOKEN || "",
     
     // API URLs
-    API_DEV_URL: process.env.API_DEV_URL || "http://localhost:3335",
-    API_STAGING_URL: process.env.API_STAGING_URL || "http://localhost:3335",
-    API_PROD_URL: process.env.API_PROD_URL || "https://api.nairaup.com",
+    API_DEV_URL: process.env.API_DEV_URL || "http://10.0.2.2:3335/api/v1",
+    API_STAGING_URL: process.env.API_STAGING_URL || "http://10.0.2.2:3335/api/v1",
+    API_PROD_URL: process.env.API_PROD_URL || "https://api.nairaup.com/api/v1",
     
     // Google Configuration
     ANDROID_GOOGLE_API_KEY: process.env.ANDROID_GOOGLE_API_KEY || "",
@@ -91,7 +91,7 @@ module.exports = {
     [
       "expo-notifications",
       {
-        "icon": "./src/assets/images/icon.jpg",
+        "icon": "./src/assets/images/icon.png",
         "color": `#0452C0`
       }
     ],

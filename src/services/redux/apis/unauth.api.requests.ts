@@ -1,12 +1,11 @@
 // Need to use the React-specific entry point to allow generating React hooks
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Constants from "expo-constants";
 import {
-  API_BASE_URL,
   GLOBAL_RTK_CACHE_EMPTY_DURATION,
   GLOBAL_RTK_REFETCH_DURATION,
   RTK_CACHE_EMPTY_DURATION,
 } from "src/constants/app.constants";
-import { API_BEARER_TOKEN } from "@env";
 import { NetworkResponse } from "src/types/request.types";
 import { indexArrayByField } from "src/utils/app.utils";
 import {
@@ -15,6 +14,10 @@ import {
   PropertiesQueryDto,
 } from "src/types/query.types";
 import { makeUrlKeyValuePairs } from "src/services/request";
+
+// Get API values dynamically
+const API_BASE_URL = Constants.expoConfig?.extra?.API_DEV_URL || "http://localhost:3335";
+const API_BEARER_TOKEN = Constants.expoConfig?.extra?.API_BEARER_TOKEN || "";
 
 export const unAuthReduxApiRequests = createApi({
   reducerPath: "unAuthApiRequests",

@@ -54,10 +54,15 @@ export default function CreateAccountScreen({
 
   const doProceed = async () => {
     let error = "";
-    const pushnotificationtoken =
+    let pushnotificationtoken =
       (await SecureStoreManager.getItemFromSecureStore(
         `${APP_EXPO_PUSH_TOKEN}`,
       )) || "";
+
+    // Validate push token - if it's an error message, use empty string
+    if (pushnotificationtoken.includes("Error") || pushnotificationtoken.includes("not initialized")) {
+      pushnotificationtoken = "";
+    }
 
     const names = fullname.split(" ");
     if (names.length < 2) error = "You must specify your first and last names";
