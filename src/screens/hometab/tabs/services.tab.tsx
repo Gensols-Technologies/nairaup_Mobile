@@ -9,7 +9,6 @@ import {
 } from "src/components/themed.components";
 import layoutConstants from "src/constants/layout.constants";
 import fontUtils, { deivceWidth } from "src/utils/font.utils";
-import { FlatList } from "react-native-gesture-handler";
 import { Input, SelectInput } from "src/components/inputs.components";
 import { Feather } from "@expo/vector-icons";
 import { ServiceProvidersItem } from "src/components/providers.components";
@@ -76,16 +75,6 @@ export default function ServicesTabScreen({
         : undefined,
     city: city.length > 0 ? city : undefined,
   });
-
-  const renderProviders = useCallback(
-    ({ item, index }: any) => (
-      <ServiceProvidersItem
-        profile={item}
-        wrapperStyle={styles.listItemStyle}
-      />
-    ),
-    [],
-  );
 
   if (!token)
     return (
@@ -255,13 +244,15 @@ export default function ServicesTabScreen({
           ? `${profession} around you`
           : "Professionals around you"}
       </Text>
-      <FlatList
-        data={providersData?.data || []}
-        renderItem={renderProviders}
-        showsVerticalScrollIndicator={false}
-        // horizontal
-        numColumns={2}
-      />
+      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        {(providersData?.data || []).map((item: any, index: number) => (
+          <ServiceProvidersItem
+            key={`provider-${index}`}
+            profile={item}
+            wrapperStyle={styles.listItemStyle}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 }

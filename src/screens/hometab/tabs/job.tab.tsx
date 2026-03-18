@@ -4,7 +4,6 @@ import { RootStackScreenProps } from "src/types/navigation.types";
 import { ScrollView, Text } from "src/components/themed.components";
 import layoutConstants from "src/constants/layout.constants";
 import fontUtils from "src/utils/font.utils";
-import { FlatList } from "react-native-gesture-handler";
 import { Input, SelectInput } from "src/components/inputs.components";
 import { Feather } from "@expo/vector-icons";
 import { JobListingHorizontalItem } from "src/components/jobs.components";
@@ -74,13 +73,6 @@ export default function JobsTabScreen({
     minsalary: range !== "" ? range : undefined,
     city: city !== "" ? city : undefined,
   });
-
-  const renderJobs = useCallback(
-    ({ item, index }: { item: JobObjectType; index: number }) => (
-      <JobListingHorizontalItem {...item} />
-    ),
-    [],
-  );
 
   const onRefresh = () => {
     refetch();
@@ -247,16 +239,9 @@ export default function JobsTabScreen({
       {/* <Text mb={fontUtils.h(15)} size={fontUtils.h(10)}>
         Lagos, Nigeria
       </Text> */}
-      <FlatList
-        data={featuredJobs?.data || []}
-        renderItem={renderJobs}
-        refreshControl={
-          <AppRefreshControl
-            refreshing={fetchingFeatured}
-            onRefresh={fetchFeatured}
-          />
-        }
-      />
+      {(featuredJobs?.data || []).map((item: JobObjectType, index: number) => (
+        <JobListingHorizontalItem key={`featured-${index}`} {...item} />
+      ))}
       <Text
         size={fontUtils.h(12)}
         fontFamily={fontUtils.manrope_bold}
@@ -265,13 +250,9 @@ export default function JobsTabScreen({
       >
         Top Jobs for You
       </Text>
-      <FlatList
-        data={data?.data || []}
-        renderItem={renderJobs}
-        refreshControl={
-          <AppRefreshControl refreshing={isFetching} onRefresh={refetch} />
-        }
-      />
+      {(data?.data || []).map((item: JobObjectType, index: number) => (
+        <JobListingHorizontalItem key={`job-${index}`} {...item} />
+      ))}
     </ScrollView>
   );
 }

@@ -13,10 +13,10 @@ export const AppRefreshControl = React.forwardRef<
   return (
     <RefreshControl
       ref={ref}
-      colors={[colorPrimary[500]]}
-      tintColor={colorPrimary[500]}
+      colors={[colorPrimary]}
+      tintColor={colorPrimary}
       title={`Refreshing`}
-      titleColor={colorPrimary[500]}
+      titleColor={colorPrimary}
       {...props}
       hitSlop={undefined}
     />
@@ -27,7 +27,7 @@ export const ListFooterLoading = ({ refreshing }: { refreshing: boolean }) => {
   if (!refreshing) return null;
   return (
     <View style={styles.loadingView}>
-      <ActivityIndicator color={colorPrimary[500]} />
+      <ActivityIndicator color={colorPrimary} />
       <Text style={styles.loadingText}>Loading</Text>
     </View>
   );
