@@ -462,7 +462,7 @@ export const UserRoutes: RenderProps[] = [
         <ScreenHeader title={""} backBtnTitle={"Account Management"} />
       ),
     },
-  },
+  },                                              
   {
     name: "TransactionsScreen",
     component: TransactionsScreen,

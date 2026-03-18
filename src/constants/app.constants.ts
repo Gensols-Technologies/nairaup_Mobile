@@ -1,12 +1,9 @@
 import Constants from "expo-constants";
 import { UserObjectType } from "src/types/app.types";
 
-// Get API URLs from app.config.js extra field
-const API_DEV_URL = Constants.expoConfig?.extra?.API_DEV_URL || "http://192.168.100.38:3335";
-const API_STAGING_URL = Constants.expoConfig?.extra?.API_STAGING_URL || "http://192.168.100.38:3335";
 const PRODUCT_NAME = Constants.expoConfig?.extra?.PRODUCT_NAME || "NairaUp";
 
-export const API_BASE_URL = __DEV__ ? `${API_DEV_URL}` : `${API_STAGING_URL}`;
+export const API_BASE_URL = "https://api.nairaup.com/api/v1";
 
 export const GLOBAL_RTK_CACHE_EMPTY_DURATION = 5;
 export const GLOBAL_RTK_REFETCH_DURATION = 5;

@@ -15,8 +15,7 @@ import {
 } from "src/types/query.types";
 import { makeUrlKeyValuePairs } from "src/services/request";
 
-// Get API values dynamically
-const API_BASE_URL = Constants.expoConfig?.extra?.API_DEV_URL || "http://localhost:3335";
+const API_BASE_URL = "https://api.nairaup.com/api/v1";
 const API_BEARER_TOKEN = Constants.expoConfig?.extra?.API_BEARER_TOKEN || "";
 
 export const unAuthReduxApiRequests = createApi({

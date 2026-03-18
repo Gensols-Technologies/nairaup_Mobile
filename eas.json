@@ -5,7 +5,37 @@
   },
   "build": {
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "PRODUCT_NAME": "NairaUp",
+        "API_BEARER_TOKEN": "d0212dacf5273b420970aae3a1603b46d320d07b9d621db4e16b8101b51462594950c407faa12c191936ba6ddf04575ec358f546330e0ef8e19207861bc85e16",
+        "API_DEV_URL": "http://192.168.100.38:3335/api/v1",
+        "API_STAGING_URL": "http://192.168.100.38:3335/api/v1",
+        "API_PROD_URL": "https://api.nairaup.com/api/v1",
+        "ANDROID_GOOGLE_API_KEY": "YOUR_ANDROID_GOOGLE_API_KEY",
+        "IOS_GOOGLE_API_KEY": "YOUR_IOS_GOOGLE_API_KEY",
+        "ANDROID_MAP_KEY": "YOUR_ANDROID_MAP_KEY",
+        "IOS_MAP_KEY": "YOUR_IOS_MAP_KEY",
+        "FIREBASE_API_KEY": "AIzaSyDXmK1L2Z3X4C5V6B7N8M9Q0O1P2R3S4T5",
+        "FIREBASE_AUTH_DOMAIN": "test-naira.firebaseapp.com",
+        "FIREBASE_DATABASE_URL": "https://test-naira-default-rtdb.firebaseio.com",
+        "FIREBASE_PROJECT_ID": "test-naira",
+        "FIREBASE_STORAGE_BUCKET": "test-naira.appspot.com",
+        "FIREBASE_MESSAGING_SENDER_ID": "123456789012",
+        "FIREBASE_APP_ID": "1:123456789012:android:abcdef1234567890",
+        "FIREBASE_MEASUREMENT_ID": "G-ABCDEFGHIJ",
+        "PAYSTACK_PUBLIC_KEY": "pk_test_9360edc645fc0d309b47148aaaf8362fd6750ca8",
+        "PAYSTACK_PUBLIC_KEY_LIVE": "pk_live_xxxxxxxxxxxxxxxxxxxx",
+        "ONESIGNAL_APP_ID": "2422e623-f093-4e37-9ab7-c1454353b27c",
+        "PERSIST_CONFIG_KEY": "nairaup-persist",
+        "COUNTRIES_API_URL": "https://restcountries.com/v3.1",
+        "AUTH_TOKEN_COUNTRIES": "",
+        "GOOGLE_SERVICES_JSON": "./google-services.json",
+        "GOOGLE_SERVICES_INFO_PLIST": "./GoogleService-Info.plist"
+      }
     },
     "development": {
       "extends": "production",

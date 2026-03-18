@@ -153,23 +153,7 @@ export async function requestClan({
     });
 
   // Get API base URL dynamically at request time
-  // On Android, 'localhost' refers to the device itself — use 10.0.2.2 for emulator
-  // or the machine's LAN IP for a physical device.
-  const getRawBaseUrl = (): string => {
-    if (__DEV__) {
-      const devUrl: string =
-        Constants.expoConfig?.extra?.API_DEV_URL || "http://10.0.2.2:3335/api/v1";
-      if (Platform.OS === "android") {
-        // Replace localhost / 127.0.0.1 with 10.0.2.2 for Android emulator
-        return devUrl.replace(/(localhost|127\.0\.0\.1)/, "10.0.2.2");
-      }
-      return devUrl;
-    }
-    return (
-      Constants.expoConfig?.extra?.API_PROD_URL || "https://api.nairaup.com/api/v1"
-    );
-  };
-  const API_BASE_URL = getRawBaseUrl();
+  const API_BASE_URL = "https://api.nairaup.com/api/v1";
   
   if (__DEV__)
     console.log(
