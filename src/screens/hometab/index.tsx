@@ -40,6 +40,7 @@ export default function HomeTabScreen({
         initialLayout={{ width: layout.width }}
         renderTabBar={(props) => (
           <TabBar
+            scrollEnabled={true}
             indicatorStyle={{
               backgroundColor: colorPrimary,
               height: fontUtils.h(2),
@@ -51,6 +52,12 @@ export default function HomeTabScreen({
               height: fontUtils.h(40),
               marginTop: fontUtils.h(15),
               // marginBottom: fontUtils.h(20),
+            }}
+            tabStyle={{
+              width: 100,
+            }}
+            contentContainerStyle={{
+              paddingHorizontal: fontUtils.w(10),
             }}
             {...props}
           />

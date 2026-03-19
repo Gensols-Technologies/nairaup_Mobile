@@ -10,11 +10,12 @@ import { JobObjectType } from "src/types/jobs.types";
 import { TimeAgo } from "src/utils/app.utils";
 import { shortenNumber } from "src/utils/numbers.utils";
 import { useAppSelector } from "src/hooks/useReduxHooks";
-import { useGetJobsApplicationsQuery } from "src/services/redux/apis";
+import { useGetJobsApplicationsQuery, useSaveJobMutation } from "src/services/redux/apis";
 
 export const JobListingItem = memo(function JobListingItem(
   data: JobObjectType,
 ) {
+  const [saveJob] = useSaveJobMutation();
   const { profile } = useAppSelector((state) => state.auth.user);
   const navigation = useNavigation();
   const goToJob = () =>
@@ -52,16 +53,28 @@ export const JobListingItem = memo(function JobListingItem(
               >
                 {data.company}
               </Text>
-              <Text numberOfLines={1} size={fontUtils.h(10)}>{`${data.city}${
-                data.state ? `, ${data?.state}` : ""
-              }`}</Text>
+              <Text numberOfLines={1} size={fontUtils.h(10)}>{`${data.city}${data.state ? `, ${data?.state}` : ""
+                }`}</Text>
             </View>
           </View>
-          <Image
-            source={require("src/assets/images/icons/stash_save-ribbon.png")}
-            style={styles.ribbonStyle}
-            wrapperStyle={styles.ribbontWrapperStyle}
-          />
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                const res = await saveJob({ jobid: `${data.id}` }).unwrap();
+                if (res.code === 200 || res.code === 201) {
+                  // Success toast handled by requestClan usually, but we can add more if needed.
+                }
+              } catch (error) {
+                console.log("Error saving job:", error);
+              }
+            }}
+          >
+            <Image
+              source={require("src/assets/images/icons/stash_save-ribbon.png")}
+              style={styles.ribbonStyle}
+              wrapperStyle={styles.ribbontWrapperStyle}
+            />
+          </TouchableOpacity>
         </View>
         <Text
           mt={fontUtils.h(10)}
@@ -94,11 +107,10 @@ export const JobListingItem = memo(function JobListingItem(
         ]}
       >
         <Text size={fontUtils.h(10)} fontFamily={fontUtils.manrope_bold}>
-          {`N${shortenNumber(data.minsalary)}${
-            Number(data.maxsalary) > Number(data.minsalary)
-              ? ` - ${shortenNumber(data.maxsalary)}`
-              : ""
-          }`}
+          {`N${shortenNumber(data.minsalary)}${Number(data.maxsalary) > Number(data.minsalary)
+            ? ` - ${shortenNumber(data.maxsalary)}`
+            : ""
+            }`}
         </Text>
         <Button
           title={application !== null ? "Applied" : "Apply"}
@@ -127,8 +139,8 @@ export const JobListingHorizontalItem = memo(function JobListingHorizontalItem(
     !token
       ? navigation.navigate("LoginScreen")
       : navigation.navigate("JobViewScreen", {
-          data,
-        });
+        data,
+      });
 
   return (
     <TouchableOpacity
@@ -175,11 +187,10 @@ export const JobListingHorizontalItem = memo(function JobListingHorizontalItem(
         >
           {featured || applied ? (
             <Text color={colorPrimary} size={fontUtils.h(9)}>
-              {`N${shortenNumber(data.minsalary)}${
-                Number(data.maxsalary) > Number(data.minsalary)
-                  ? ` - ${shortenNumber(data.maxsalary)}`
-                  : ""
-              }`}
+              {`N${shortenNumber(data.minsalary)}${Number(data.maxsalary) > Number(data.minsalary)
+                ? ` - ${shortenNumber(data.maxsalary)}`
+                : ""
+                }`}
             </Text>
           ) : null}
           {!applied ? (

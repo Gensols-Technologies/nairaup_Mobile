@@ -28,10 +28,12 @@ export default function SavedItemsScreen({
 
   const { data: apartments } = useGetSavedPropertiesQuery({
     "property.type": "apartment",
+    profileid: `${id}`,
   });
 
   const { data: hotels } = useGetSavedPropertiesQuery({
     "property.type": "hotel",
+    profileid: `${id}`,
   });
 
   const {

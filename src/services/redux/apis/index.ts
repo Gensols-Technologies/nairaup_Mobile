@@ -147,6 +147,20 @@ export const reduxApiRequests = createApi({
         url: `/portfolios${makeUrlKeyValuePairs(queryParams)}`,
       }),
     }),
+    saveJob: builder.mutation<NetworkResponse, { jobid: string }>({
+      query: (data) => ({
+        url: "/jobs/saved",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    saveProperty: builder.mutation<NetworkResponse, { propertyid: string }>({
+      query: (data) => ({
+        url: "/properties/saved",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -166,4 +180,6 @@ export const {
   useGetSavedPropertiesQuery,
   useGetTransactionsQuery,
   useGetPortfolioQuery,
+  useSaveJobMutation,
+  useSavePropertyMutation,
 } = reduxApiRequests;

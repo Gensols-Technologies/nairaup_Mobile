@@ -59,6 +59,10 @@ export const Button = ({
       ]}
     >
       <RNEButton
+        titleProps={{
+          adjustsFontSizeToFit: true,
+          numberOfLines: 1,
+        }}
         titleStyle={[
           {
             fontFamily: fontUtil.manrope_semibold,

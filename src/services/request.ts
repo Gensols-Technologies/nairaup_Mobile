@@ -9,7 +9,7 @@ axios.defaults.timeout = 60 * 1000;
 
 export const buildHeader = async (isDefaultAuth?: boolean): Promise<any> => {
   const API_BEARER_TOKEN = Constants.expoConfig?.extra?.API_BEARER_TOKEN || "";
-  
+
   const headers = {
     "Content-Type": "application/json",
     "Cache-Control": "no-cache",
@@ -154,7 +154,7 @@ export async function requestClan({
 
   // Get API base URL dynamically at request time
   const API_BASE_URL = "https://api.nairaup.com/api/v1";
-  
+
   if (__DEV__)
     console.log(
       "✅ Making axios request",
@@ -178,7 +178,7 @@ export async function requestClan({
       data: transformedData,
       headers,
       maxBodyLength: Infinity,
-      onUploadProgress: function (progressEvent) {},
+      onUploadProgress: function (progressEvent) { },
     });
     reqStatus = response?.status;
     responseData = response.data;

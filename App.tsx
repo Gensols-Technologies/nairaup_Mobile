@@ -37,7 +37,11 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import RefreshFirebaseToken from "src/components/firebase.token.refresh";
 import { SimpleImageSliderThemeProvider } from "@one-am/react-native-simple-image-slider";
 
-GoogleSignin.configure();
+GoogleSignin.configure({
+  webClientId:
+    "842923839141-je7la5iqamk8dhd6613a15gb1hdio9k7.apps.googleusercontent.com",
+  offlineAccess: true,
+});
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

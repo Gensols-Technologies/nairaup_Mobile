@@ -74,13 +74,13 @@ export default function CreateAccountScreen({
         text1: "Sign Up",
         text2: error,
       });
-    
+
     const isEmail = IsEmail(username);
     const signupReq = await signUp({
       firstname: names[0],
       lastname: names[1],
-      email: isEmail ? username : undefined,
-      mobile: !isEmail ? username : undefined,
+      email: isEmail ? username : "",
+      mobile: !isEmail ? username : "",
       pushnotificationtoken,
       password,
     });

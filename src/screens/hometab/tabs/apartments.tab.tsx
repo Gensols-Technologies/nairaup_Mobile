@@ -171,7 +171,7 @@ export default function ApartmentsTabScreen({
                   zIndex: 3,
                 }}
               />
-              <View style={[layoutConstants.styles.rowView]}>
+              <View style={[]}>
                 <SelectInput
                   items={statesData?.data || []}
                   value={state}
@@ -190,8 +190,7 @@ export default function ApartmentsTabScreen({
                     numberOfLines: 1,
                   }}
                   wrapperStyle={{
-                    flex: 1,
-                    marginRight: fontUtils.w(5),
+                    marginBottom: fontUtils.h(10),
                     zIndex: 2,
                   }}
                 />
@@ -213,8 +212,6 @@ export default function ApartmentsTabScreen({
                     numberOfLines: 1,
                   }}
                   wrapperStyle={{
-                    flex: 1,
-                    marginRight: fontUtils.w(5),
                     zIndex: 2,
                   }}
                 />

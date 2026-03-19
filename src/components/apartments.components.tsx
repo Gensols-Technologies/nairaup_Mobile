@@ -11,9 +11,10 @@ import { PropertyObjectType } from "src/types/properties.types";
 import { convertNumberToWords, shortenNumber } from "src/utils/numbers.utils";
 import { useAppSelector } from "src/hooks/useReduxHooks";
 import { CapitalizeFirstLetter } from "src/utils/app.utils";
+import { useSavePropertyMutation } from "src/services/redux/apis";
 
 export const PurchasedApartmentItem = memo(
-  function PurchasedApartmentItem({}: {}) {
+  function PurchasedApartmentItem({ }: {}) {
     return (
       <TouchableOpacity style={[styles.purchasedItemViewStyle]}>
         <Image
@@ -72,6 +73,7 @@ export const SoldApartmentItem = memo(function SoldApartmentItem({
 export const ApartmentListingItem = memo(function ApartmentListingItem(
   data: PropertyObjectType,
 ) {
+  const [saveProperty] = useSavePropertyMutation();
   const { token } = useAppSelector((state) => state.auth);
   const navigation = useNavigation();
   const {
@@ -92,13 +94,13 @@ export const ApartmentListingItem = memo(function ApartmentListingItem(
     !token
       ? navigation.navigate("LoginScreen")
       : navigation.navigate(
-          type === "hotel" || type === "shortlet"
-            ? "HotelViewScreen"
-            : "ApartmentViewScreen",
-          {
-            data,
-          },
-        );
+        type === "hotel" || type === "shortlet"
+          ? "HotelViewScreen"
+          : "ApartmentViewScreen",
+        {
+          data,
+        },
+      );
 
   return (
     <TouchableOpacity style={[styles.listingViewStyle]} onPress={onPress}>
@@ -111,11 +113,26 @@ export const ApartmentListingItem = memo(function ApartmentListingItem(
             style={styles.imageStyle}
             onPress={onPress}
           />
-          <Image
-            source={require("src/assets/images/icons/stash_save-ribbon.png")}
-            style={styles.ribbonStyle}
-            wrapperStyle={styles.ribbontWrapperStyle}
-          />
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                const res = await saveProperty({
+                  propertyid: `${id}`,
+                }).unwrap();
+                if (res.code === 200 || res.code === 201) {
+                  // Success
+                }
+              } catch (error) {
+                console.log("Error saving property:", error);
+              }
+            }}
+          >
+            <Image
+              source={require("src/assets/images/icons/stash_save-ribbon.png")}
+              style={styles.ribbonStyle}
+              wrapperStyle={styles.ribbontWrapperStyle}
+            />
+          </TouchableOpacity>
         </View>
         <View>
           <Text
@@ -158,18 +175,16 @@ export const ApartmentListingItem = memo(function ApartmentListingItem(
             ]}
           >
             {!price ? (
-              <Text size={fontUtils.h(10)}>{`${CapitalizeFirstLetter(city)}${
-                state ? `, ${CapitalizeFirstLetter(state)}` : ""
-              }`}</Text>
+              <Text size={fontUtils.h(10)}>{`${CapitalizeFirstLetter(city)}${state ? `, ${CapitalizeFirstLetter(state)}` : ""
+                }`}</Text>
             ) : null}
             <Text size={fontUtils.h(8)}>
               <MaterialCommunityIcons
                 name="map-marker-radius-outline"
                 color="black"
               />
-              {` ${CapitalizeFirstLetter(city)}${
-                state ? `, ${CapitalizeFirstLetter(state)}` : ""
-              }`}
+              {` ${CapitalizeFirstLetter(city)}${state ? `, ${CapitalizeFirstLetter(state)}` : ""
+                }`}
             </Text>
             {price ? (
               <Text size={fontUtils.h(8)}>
@@ -213,6 +228,7 @@ export const styles = StyleSheet.create({
   ribbonStyle: {
     height: fontUtils.w(20),
     width: fontUtils.w(20),
+    marginTop: fontUtils.h(15),
   },
   ribbontWrapperStyle: {
     width: fontUtils.h(24),
