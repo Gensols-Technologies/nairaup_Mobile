@@ -79,8 +79,8 @@ export default function CreateAccountScreen({
     const signupReq = await signUp({
       firstname: names[0],
       lastname: names[1],
-      email: isEmail ? username : "",
-      mobile: !isEmail ? username : "",
+      ...(isEmail && { email: username }),
+      ...(!isEmail && { mobile: username }),
       pushnotificationtoken,
       password,
     });
@@ -88,8 +88,8 @@ export default function CreateAccountScreen({
     // If signup successful, request OTP
     if (signupReq.code === 201) {
       const otpReq = await requestOTP({
-        email: isEmail ? username : undefined,
-        mobile: !isEmail ? username : undefined,
+        ...(isEmail && { email: username }),
+        ...(!isEmail && { mobile: username }),
         ispasswordreset: false,
       });
 
