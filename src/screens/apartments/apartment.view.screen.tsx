@@ -71,7 +71,6 @@ export default function ApartmentViewScreen({
           type: "warn",
           text1: "Payment",
           text2: "Payment cancelled",
-          useModal: true,
         }),
       onLoad: (res) => console.log("WebView Loaded:", res),
       onError: (err) => {
@@ -79,19 +78,26 @@ export default function ApartmentViewScreen({
           type: "error",
           text1: "Payment",
           text2: "Error occured during payment",
-          useModal: true,
         });
       },
     });
   };
 
   const doPayWithEscrow = async () => {
-    const req = await generatePaymentReference({
-      propertyid: data.id,
-    });
+    const req = await generatePaymentReference({ propertyid: data.id }, () => {}, false);
     if (req.code === 201) {
-      const totalPayable = req.data?.amount + req.data?.servicefee;
+      const totalPayable = Number(req.data?.amount || 0) + Number(req.data?.servicefee || 0);
+      if (!totalPayable || totalPayable <= 0) {
+        Toast.show({ type: "error", text1: "Payment Error", text2: "Invalid payment amount" });
+        return;
+      }
       payNow(totalPayable, req.data?.reference);
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Payment Error",
+        text2: req?.message || "Could not initiate payment. Please try again.",
+      });
     }
   };
 

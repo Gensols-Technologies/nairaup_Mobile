@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-paystack-webview/production/lib/PaystackProvider.js b/node_modules/react-native-paystack-webview/production/lib/PaystackProvider.js
+index 1234abc..5678def 100644
+--- a/node_modules/react-native-paystack-webview/production/lib/PaystackProvider.js
++++ b/node_modules/react-native-paystack-webview/production/lib/PaystackProvider.js
+@@ -85,9 +85,9 @@ const PaystackProvider = ({ publicKey, currency, defaultChannels = ['card'], deb
+     return (<exports.PaystackContext.Provider value={{ popup: { checkout, newTransaction } }}>
+             {children}
+-            <react_native_1.Modal visible={visible} transparent animationType="slide">
++            <react_native_1.Modal visible={visible} transparent animationType="slide" onRequestClose={close}>
+                 <react_native_1.SafeAreaView style={styles_1.styles.container}>
+-                    <react_native_webview_1.WebView originWhitelist={["*"]} source={{ html: paystackHTML }} onMessage={handleMessage} javaScriptEnabled domStorageEnabled startInLoadingState onLoadStart={() => debug && console.log('[Paystack] WebView Load Start')} onLoadEnd={() => debug && console.log('[Paystack] WebView Load End')} renderLoading={() => <react_native_1.ActivityIndicator size="large"/>}/>
++                    <react_native_webview_1.WebView originWhitelist={["*"]} source={{ html: paystackHTML, baseUrl: 'https://checkout.paystack.com' }} onMessage={handleMessage} javaScriptEnabled domStorageEnabled startInLoadingState onLoadStart={() => debug && console.log('[Paystack] WebView Load Start')} onLoadEnd={() => debug && console.log('[Paystack] WebView Load End')} renderLoading={() => <react_native_1.ActivityIndicator size="large"/>}/>
+                 </react_native_1.SafeAreaView>
+             </react_native_1.Modal>
+         </exports.PaystackContext.Provider>);

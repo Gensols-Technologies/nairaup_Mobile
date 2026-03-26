@@ -548,23 +548,58 @@ export const DateTimeInput = ({
     date === null ? moment().toDate() : date,
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // On Android, datetime mode is split into date-then-time steps
+  const [androidPickerStep, setAndroidPickerStep] = useState<"date" | "time">("date");
+  const [pendingDate, setPendingDate] = useState<Date | null>(null);
   const dateModalRef = useRef<Modalize>(null);
 
   const onChangeVal = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (Platform.OS === "android") {
       setShowDatePicker(false);
+      if (event.type === "dismissed") {
+        setPendingDate(null);
+        setAndroidPickerStep("date");
+        return;
+      }
+      if (mode === "datetime") {
+        if (androidPickerStep === "date") {
+          // Store the chosen date, now show time picker
+          const chosen = selectedDate || value;
+          setPendingDate(chosen);
+          setAndroidPickerStep("time");
+          setShowDatePicker(true);
+          return;
+        } else {
+          // Merge time into the pending date
+          const base = pendingDate || value;
+          const merged = new Date(base);
+          const t = selectedDate || value;
+          merged.setHours(t.getHours(), t.getMinutes(), t.getSeconds());
+          setPendingDate(null);
+          setAndroidPickerStep("date");
+          setValue(merged);
+          onChange(merged);
+          return;
+        }
+      }
     }
     setValue(selectedDate || new Date());
     onChange(selectedDate);
   };
+
+  // Determine which mode to actually pass to the native picker on Android
+  const activeAndroidMode: "date" | "time" | "countdown" =
+    Platform.OS === "android" && mode === "datetime"
+      ? androidPickerStep
+      : (mode as any) || "date";
 
   const renderPicker = () => {
     return (
       //@ts-ignore
       <DateTimePicker
         testID="dateTimePicker"
-        value={value}
-        mode={mode || `date`}
+        value={androidPickerStep === "time" && pendingDate ? pendingDate : value}
+        mode={Platform.OS === "android" ? activeAndroidMode : (mode || "date")}
         display={Platform.OS === "ios" ? displayIos : displayAndroid}
         maximumDate={maximumDate}
         minimumDate={minimumDate}

@@ -10,12 +10,14 @@ const useTransaction = () => {
       propertyid?: number;
     },
     cb = () => {},
+    showToast = false,
   ): Promise<NetworkResponse> => {
     setLoading(true);
     const request: NetworkResponse = await requestClan({
       route: `/transactions/reference`,
       type: "POST",
       data,
+      showToast,
     });
     cb();
     setLoading(false);

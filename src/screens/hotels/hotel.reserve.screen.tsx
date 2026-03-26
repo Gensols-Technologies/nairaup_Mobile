@@ -53,7 +53,7 @@ export default function HotelReserveScreen({
     reservationid: number,
   ) => {
     console.log("💳 Opening Paystack with:", { amount, reference, email });
-    Toast.show({ type: "info", text1: "Payment", text2: "Opening Paystack checkout...", useModal: true });
+    Toast.show({ type: "info", text1: "Payment", text2: "Opening Paystack checkout..." });
     popup.checkout({
       email: email,
       amount,
@@ -101,7 +101,7 @@ export default function HotelReserveScreen({
       const nights = Math.max(1, end.diff(start, "d"));
 
       console.log("🚀 Starting reservation for room:", route.params.id);
-      Toast.show({ type: "info", text1: "Reservation", text2: "Preparing your reservation...", useModal: true });
+      Toast.show({ type: "info", text1: "Reservation", text2: "Preparing your reservation..." });
 
       const req = await makeReservation({
         roomid: route.params.id,
@@ -120,7 +120,7 @@ export default function HotelReserveScreen({
         console.log("💰 Payment Data:", req.data?.payment);
         const amount = Number(req.data?.payment?.amount || 0);
         const fee = Number(req.data?.payment?.servicefee || 0);
-        const totalPayable = Math.round((amount + fee) * 100);
+        const totalPayable = Math.round(amount + fee);
 
         console.log("💡 Calculated Total:", totalPayable);
 
@@ -134,7 +134,7 @@ export default function HotelReserveScreen({
           return;
         }
 
-        Toast.show({ type: "success", text1: "Success", text2: "Reservation created. Opening payment...", useModal: true });
+        Toast.show({ type: "success", text1: "Success", text2: "Reservation created. Opening payment..." });
 
         payNow(
           totalPayable,
@@ -145,6 +145,11 @@ export default function HotelReserveScreen({
         );
       } else {
         console.warn("⚠️ Reservation Failed with code:", req.code);
+        Toast.show({
+          type: "error",
+          text1: "Reservation Failed",
+          text2: req?.message || "Room is not available for the selected dates. Please try different dates.",
+        });
       }
     } catch (error: any) {
       console.error("🔥 CRITICAL RESERVATION ERROR:", error);
