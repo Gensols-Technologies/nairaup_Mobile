@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { RootStackScreenProps } from "src/types/navigation.types";
 import {
   SafeAreaView,
@@ -19,7 +19,6 @@ import colorsConstants, {
 } from "src/constants/colors.constants";
 import { useAppTheme } from "src/providers/theme.provider";
 import { ApartmentFeatures } from "../apartments/components/features.components";
-import { FlatList } from "react-native-gesture-handler";
 import { ReviewItem } from "./components/reviews.components";
 import { RoomItem } from "./components/rooms.components";
 import { useGetActiveReservationQuery } from "src/services/redux/apis";
@@ -159,9 +158,8 @@ export default function HotelViewScreen({
                   color: colorPrimary,
                   feature: `${data.address}\n${CapitalizeFirstLetter(
                     data.city,
-                  )} ${
-                    data.state ? `, ${CapitalizeFirstLetter(data.state)}` : ``
-                  }`,
+                  )} ${data.state ? `, ${CapitalizeFirstLetter(data.state)}` : ``
+                    }`,
                   id: -1,
                   slug: "location",
                 },

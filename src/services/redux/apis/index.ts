@@ -21,6 +21,7 @@ import { NetworkResponse } from "src/types/request.types";
 import SecureStoreManager from "src/utils/securestoremanager.utils";
 
 export const reduxApiRequests = createApi({
+  tagTypes: ["Notifications"],
   reducerPath: "apiRequests",
   baseQuery: fetchBaseQuery({
     baseUrl: `${API_BASE_URL}`,
@@ -63,6 +64,7 @@ export const reduxApiRequests = createApi({
       query: (queryParams) => ({
         url: `/notifications${makeUrlKeyValuePairs(queryParams)}`,
       }),
+      providesTags: ["Notifications"],
     }),
 
     getNotificationsCount: builder.query<
@@ -73,6 +75,19 @@ export const reduxApiRequests = createApi({
       query: (queryParams) => ({
         url: `/notifications/count${makeUrlKeyValuePairs(queryParams)}`,
       }),
+      providesTags: ["Notifications"],
+    }),
+
+    markNotificationsRead: builder.mutation<
+      NetworkResponse,
+      { ids: number[] }
+    >({
+      query: (data) => ({
+        url: "/notifications",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Notifications"],
     }),
 
     getJobsApplications: builder.query<
@@ -182,4 +197,6 @@ export const {
   useGetPortfolioQuery,
   useSaveJobMutation,
   useSavePropertyMutation,
+  useMarkNotificationsReadMutation,
 } = reduxApiRequests;
+

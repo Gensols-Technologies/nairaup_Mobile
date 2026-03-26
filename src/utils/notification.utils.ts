@@ -8,6 +8,8 @@ import SecureStoreManager from "./securestoremanager.utils";
 import { APP_EXPO_PUSH_TOKEN } from "src/constants/app.constants";
 import { OneSignal, LogLevel } from "react-native-onesignal";
 import { ONESIGNAL_APP_ID } from "@env";
+import { useAppSelector } from "src/hooks/useReduxHooks";
+import useUser from "src/hooks/apis/useUser";
 
 export async function registerForPushNotificationsAsync() {
   let token;
@@ -86,6 +88,9 @@ export const PushNotificationSetup = () => {
     initializeOneSignal();
   }, []);
 
+  const { profile } = useAppSelector((state) => state.auth.user);
+  const { updateProfile } = useUser();
+
   useEffect(() => {
     if (expoPushToken && expoPushToken !== "") {
       // Console logging for debug
@@ -94,10 +99,25 @@ export const PushNotificationSetup = () => {
         `${APP_EXPO_PUSH_TOKEN}`,
         expoPushToken,
       )
-        .then(() => {})
+        .then(() => { })
         .catch((e) => console.log(e));
+
+      // Sync token with backend if user is logged in and token has changed
+      if (
+        profile &&
+        profile.id !== -1 &&
+        profile.pushnotificationtoken !== expoPushToken
+      ) {
+        console.log("🔄 Syncing push token with backend...");
+        updateProfile(
+          {
+            pushnotificationtoken: expoPushToken,
+          },
+          true,
+        ).catch((e) => console.log("⚠️ Error syncing push token:", e));
+      }
     }
-  }, [expoPushToken]);
+  }, [expoPushToken, profile]);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(

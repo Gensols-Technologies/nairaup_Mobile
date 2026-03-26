@@ -8,11 +8,13 @@ import { Button } from "src/components/buttons.components";
 import layoutConstants from "src/constants/layout.constants";
 import SecureStoreManager from "src/utils/securestoremanager.utils";
 import { APP_INITIAL_ROUTE } from "src/constants/app.constants";
+import { useAppSelector } from "src/hooks/useReduxHooks";
 
 export default function OnboardingIntroScreen({
   navigation,
   route,
 }: RootStackScreenProps<"OnboardingIntroScreen">) {
+  const { token } = useAppSelector((state) => state.auth);
   const [slide, setSlide] = useState(0);
   const INTRO_SLIDES = [
     {
@@ -116,7 +118,11 @@ export default function OnboardingIntroScreen({
       APP_INITIAL_ROUTE,
       "LoginScreen",
     );
-    navigation.navigate("CreateAccountScreen");
+    if (token) {
+      navigation.navigate("App");
+    } else {
+      navigation.navigate("CreateAccountScreen");
+    }
   };
 
   return (

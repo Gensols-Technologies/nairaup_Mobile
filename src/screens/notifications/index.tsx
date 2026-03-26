@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
-import { StyleSheet } from "react-native";
-import { RootStackScreenProps } from "src/types/navigation.types";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaView, Text } from "src/components/themed.components";
 import { useAppTheme } from "src/providers/theme.provider";
 import fontUtils from "src/utils/font.utils";
@@ -14,29 +13,40 @@ import { AppRefreshControl } from "src/components/refreshcontrol.component";
 import { NotificationObjectType } from "src/types/notifications.types";
 import { useAppSelector } from "src/hooks/useReduxHooks";
 
-export default function NotificationsScreen({
-  navigation,
-  route,
-}: RootStackScreenProps<"NotificationsTabNavigator">) {
+export default function NotificationsScreen() {
   const { theme } = useAppTheme();
   const { profile } = useAppSelector((state) => state.auth.user);
 
   const { data: countData } = useGetNotificationsCountQuery({
     status: "pending",
-    //@ts-ignore
-    profileid: profile.id,
+    profileid: `${profile.id}`,
   });
 
-  const { data, isFetching, refetch } = useGetNotificationsQuery({
-    //@ts-ignore
-    profileid: profile.id,
+  const { data, isFetching, refetch, isError, error } = useGetNotificationsQuery({
+    profileid: `${profile.id}`,
   });
+
+  if (__DEV__) {
+    console.log("📬 Notifications data:", JSON.stringify(data));
+    console.log("📊 Notifications count:", JSON.stringify(countData));
+    if (isError) console.log("❌ Notifications error:", JSON.stringify(error));
+  }
+
+  const notifications: NotificationObjectType[] = data?.data || [];
 
   const renderItem = useCallback(
-    ({ item, index }: { item: NotificationObjectType; index: number }) => (
+    ({ item }: { item: NotificationObjectType }) => (
       <NotificationItem {...item} />
     ),
     [],
+  );
+
+  const renderEmpty = () => (
+    <View style={styles.emptyContainer}>
+      <Text align="center" size={fontUtils.h(13)}>
+        No notifications yet
+      </Text>
+    </View>
   );
 
   return (
@@ -49,8 +59,10 @@ export default function NotificationsScreen({
         {`(${countData?.data?.count ?? 0}) new notifications`}
       </Text>
       <FlatList
-        data={data?.data || []}
+        data={notifications}
         renderItem={renderItem}
+        keyExtractor={(item) => item.id?.toString()}
+        ListEmptyComponent={renderEmpty}
         refreshControl={
           <AppRefreshControl refreshing={isFetching} onRefresh={refetch} />
         }
@@ -63,5 +75,12 @@ export default function NotificationsScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: fontUtils.w(16),
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: fontUtils.h(80),
   },
 });

@@ -71,8 +71,8 @@ export default function ServicesTabScreen({
       searchValue.length > 0
         ? searchValue
         : profession.length > 0 && profession !== "All"
-        ? profession
-        : undefined,
+          ? profession
+          : undefined,
     city: city.length > 0 ? city : undefined,
   });
 
@@ -244,7 +244,7 @@ export default function ServicesTabScreen({
           ? `${profession} around you`
           : "Professionals around you"}
       </Text>
-      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
         {(providersData?.data || []).map((item: any, index: number) => (
           <ServiceProvidersItem
             key={`provider-${index}`}
@@ -274,10 +274,11 @@ const styles = StyleSheet.create({
   },
   listItemStyle: {
     marginBottom: fontUtils.h(20),
+    marginRight: 0,
     width:
       (deivceWidth -
         layoutConstants.mainViewHorizontalPadding * 2 -
-        fontUtils.w(20)) /
+        fontUtils.w(10)) /
       2,
   },
 });

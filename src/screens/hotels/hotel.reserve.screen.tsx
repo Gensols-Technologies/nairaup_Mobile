@@ -36,10 +36,10 @@ export default function HotelReserveScreen({
   const [email, setEmail] = useState(user.email);
   const [mobile, setMobile] = useState(user.mobile);
   const [checkInDate, setCheckinDate] = useState(
-    moment().format("YYYY-MM-DD hh:mm"),
+    moment().add(15, "minutes").format("YYYY-MM-DD HH:mm"),
   );
   const [checkOutDate, setCheckOutDate] = useState(
-    moment().add(1, "day").format("YYYY-MM-DD hh:mm"),
+    moment().add(1, "day").format("YYYY-MM-DD HH:mm"),
   );
   const [time, setTime] = useState(moment().format("HH:mm:ss"));
   const [guests, setGuests] = useState("1");
@@ -52,6 +52,8 @@ export default function HotelReserveScreen({
     hotelName: string,
     reservationid: number,
   ) => {
+    console.log("💳 Opening Paystack with:", { amount, reference, email });
+    Toast.show({ type: "info", text1: "Payment", text2: "Opening Paystack checkout...", useModal: true });
     popup.checkout({
       email: email,
       amount,
@@ -93,26 +95,64 @@ export default function HotelReserveScreen({
   };
 
   const doSubmit = async () => {
-    const req = await makeReservation({
-      roomid: route.params.id,
-      email,
-      fullname: fullName,
-      mobile,
-      numberofguests: Number(guests),
-      checkindatetime: moment(checkInDate).format("YYYY-MM-DDTHH:mm:ss"),
-      checkoutdatetime: moment(checkOutDate).format("YYYY-MM-DDTHH:mm:ss"),
-      numberofnights: moment(checkOutDate).diff(moment(checkInDate), "d"),
-    });
-    if (req.code === 201) {
-      const totalPayable =
-        req.data?.payment?.amount + req.data?.payment?.servicefee;
-      payNow(
-        totalPayable,
-        req.data?.payment?.reference,
-        req?.data?.room?.title,
-        req?.data?.room?.property?.title,
-        req?.data?.id,
-      );
+    try {
+      const start = moment(checkInDate).startOf("day");
+      const end = moment(checkOutDate).startOf("day");
+      const nights = Math.max(1, end.diff(start, "d"));
+
+      console.log("🚀 Starting reservation for room:", route.params.id);
+      Toast.show({ type: "info", text1: "Reservation", text2: "Preparing your reservation...", useModal: true });
+
+      const req = await makeReservation({
+        roomid: route.params.id,
+        email,
+        fullname: fullName,
+        mobile,
+        numberofguests: Number(guests),
+        checkindatetime: moment(checkInDate).format("YYYY-MM-DDTHH:mm:ss"),
+        checkoutdatetime: moment(checkOutDate).format("YYYY-MM-DDTHH:mm:ss"),
+        numberofnights: nights,
+      });
+
+      console.log("✅ Reservation Response Received:", req.code);
+
+      if (req.code === 201) {
+        console.log("💰 Payment Data:", req.data?.payment);
+        const amount = Number(req.data?.payment?.amount || 0);
+        const fee = Number(req.data?.payment?.servicefee || 0);
+        const totalPayable = Math.round((amount + fee) * 100);
+
+        console.log("💡 Calculated Total:", totalPayable);
+
+        if (isNaN(totalPayable) || totalPayable <= 0) {
+          console.error("❌ Invalid Amount Error");
+          Toast.show({
+            type: "error",
+            text1: "Payment Error",
+            text2: "Invalid payment amount returned from server",
+          });
+          return;
+        }
+
+        Toast.show({ type: "success", text1: "Success", text2: "Reservation created. Opening payment...", useModal: true });
+
+        payNow(
+          totalPayable,
+          req.data?.payment?.reference,
+          req?.data?.room?.title,
+          req?.data?.room?.property?.title,
+          req?.data?.id,
+        );
+      } else {
+        console.warn("⚠️ Reservation Failed with code:", req.code);
+      }
+    } catch (error: any) {
+      console.error("🔥 CRITICAL RESERVATION ERROR:", error);
+      Toast.show({
+        type: "error",
+        text1: "Critical Error",
+        text2: error?.message || "An unexpected error occurred. Please try again.",
+      });
     }
   };
 

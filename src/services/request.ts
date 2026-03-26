@@ -154,6 +154,7 @@ export async function requestClan({
 
   // Get API base URL dynamically at request time
   const API_BASE_URL = "https://api.nairaup.com/api/v1";
+  // const API_BASE_URL = "http://192.168.100.238:3335/api/v1";
 
   if (__DEV__)
     console.log(
@@ -205,12 +206,14 @@ export async function requestClan({
       };
     }
   } finally {
-    if (showToast)
+    if (showToast) {
+      const isError = reqStatus > 202 || reqStatus === -1 || reqStatus === 444;
       Toast.show({
-        type: responseData.code > 202 ? "error" : "success",
+        type: isError ? "error" : "success",
         text1: toastTitle,
-        text2: responseData.message || "Unknown error occured",
+        text2: (typeof responseData === 'object' ? responseData?.message : null) || "An error occurred",
       });
+    }
     if (__DEV__)
       console.log(
         `✅ axios request ${routePlusParams.trim()} done with status ${reqStatus}`,

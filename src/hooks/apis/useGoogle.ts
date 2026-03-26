@@ -15,22 +15,23 @@ export const useGoogle = () => {
   const [loading, setLoading] = useState(false);
   const { updateReduxData } = useAuth();
   const signInWithGoogle = async (
-    cb = () => {},
+    cb = () => { },
   ): Promise<NetworkResponse | null> => {
     try {
       setLoading(true);
       await GoogleSignin.hasPlayServices();
+      await GoogleSignin.signOut();
       const userInfo = await GoogleSignin.signIn();
       let pushnotificationtoken =
         (await SecureStoreManager.getItemFromSecureStore(
           `${APP_EXPO_PUSH_TOKEN}`,
         )) || "";
-      
+
       // Validate push token - if it's an error message, use empty string
       if (pushnotificationtoken.includes("Error") || pushnotificationtoken.includes("not initialized")) {
         pushnotificationtoken = "";
       }
-      
+
       const request: NetworkResponse = await requestClan({
         route: `/auth/google`,
         type: "POST",
@@ -52,29 +53,40 @@ export const useGoogle = () => {
       }
       return request;
     } catch (error) {
-      console.log(error);
+      console.log("Google Sign-In Error Object:", JSON.stringify(error, null, 2));
+      // console.log("Google Sign-In Error Message:", error?.message);
       if (isErrorWithCode(error)) {
+        console.log("Google Sign-In Error Code:", error.code);
         let errorMsg = "";
         switch (error.code) {
           case statusCodes.SIGN_IN_CANCELLED:
-            errorMsg = "Cancelled";
-            // user cancelled the login flow
+            errorMsg = "Sign-in was cancelled";
             break;
           case statusCodes.IN_PROGRESS:
-            errorMsg = "Signin in progress";
-            // operation (eg. sign in) already in progress
+            errorMsg = "Login is currently in progress";
             break;
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-            errorMsg = "Play service is not available";
-            // play services not available or outdated
+            errorMsg = "Google Play Services not available or outdated";
+            break;
+          case "10": // DEVELOPER_ERROR
+            errorMsg = "Configuration error (check SHA-1 and package name in Google Console)";
+            console.error("DEVELOPER_ERROR (10): This usually means the SHA-1 fingerprint or package name does not match what is registered in the Google Cloud Console.");
             break;
           default:
+            errorMsg = `Google sign-in failed (Code: ${error.code})`;
             break;
         }
         Toast.show({
           type: "error",
-          text1: "Google Authentication",
-          text2: errorMsg || "Unknown error occured",
+          text1: "Authentication Error",
+          text2: errorMsg || "Unknown error occurred",
+        });
+      } else {
+        console.log("Google Sign-In Exception:", error);
+        Toast.show({
+          type: "error",
+          text1: "Sign-In Error",
+          text2: "An unexpected error occurred during Google Sign-In.",
         });
       }
       return null;

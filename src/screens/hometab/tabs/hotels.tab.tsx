@@ -24,6 +24,8 @@ import {
 } from "src/services/redux/apis/countries.api.requests";
 import { colorPrimary } from "src/constants/colors.constants";
 
+const ItemSeparator = () => <View style={{ width: fontUtils.w(16) }} />;
+
 export default function HotelsTabScreen({
   navigation,
   route,
@@ -267,6 +269,7 @@ export default function HotelsTabScreen({
         refreshControl={
           <AppRefreshControl refreshing={isFetching} onRefresh={refetch} />
         }
+        ItemSeparatorComponent={ItemSeparator}
         horizontal
       />
       {shortletsData?.data?.length > 0 ? (
@@ -288,6 +291,7 @@ export default function HotelsTabScreen({
             onRefresh={refetchShortlets}
           />
         }
+        ItemSeparatorComponent={ItemSeparator}
         horizontal
       />
       {fiveStarHotels?.data?.length > 0 ? (
@@ -309,6 +313,7 @@ export default function HotelsTabScreen({
             onRefresh={refetchFiveStars}
           />
         }
+        ItemSeparatorComponent={ItemSeparator}
         horizontal
       />
     </ScrollView>

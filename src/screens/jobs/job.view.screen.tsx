@@ -245,11 +245,10 @@ export default function JobViewScreen({
           Salary Range
         </Text>
         <Text color={colorPrimary} size={fontUtils.h(9)}>
-          {`N${formatCurrency(Number(data.minsalary))}${
-            Number(data.maxsalary) > Number(data.minsalary)
+          {`N${formatCurrency(Number(data.minsalary))}${Number(data.maxsalary) > Number(data.minsalary)
               ? ` - ${formatCurrency(Number(data.maxsalary))}`
               : ""
-          }`}
+            }`}
         </Text>
         <Button
           title={"   Contact Hiring Manager"}

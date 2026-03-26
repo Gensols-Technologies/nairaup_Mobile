@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { FlatList, ActivityIndicator, StyleSheet, View } from "react-native";
 import { RootStackScreenProps } from "src/types/navigation.types";
 import { ScrollView, Text } from "src/components/themed.components";
 import layoutConstants from "src/constants/layout.constants";
 import fontUtils from "src/utils/font.utils";
-import { FlatList } from "react-native-gesture-handler";
 import { ApartmentListingItem } from "src/components/apartments.components";
 import { Input, SelectInput } from "src/components/inputs.components";
 import { Feather } from "@expo/vector-icons";

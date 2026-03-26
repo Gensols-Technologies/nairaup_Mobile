@@ -68,23 +68,23 @@ export type TextProps = ThemeProps &
     align?: "auto" | "left" | "right" | "center" | "justify" | undefined;
     fontFamily?: any;
     type?:
-      | "default"
-      | "title"
-      | "defaultSemiBold"
-      | "subtitle"
-      | "link"
-      | "small"
-      | "extraSmall";
+    | "default"
+    | "title"
+    | "defaultSemiBold"
+    | "subtitle"
+    | "link"
+    | "small"
+    | "extraSmall";
     mt?: number;
     mb?: number;
     ml?: number;
     mr?: number;
     m?: number;
     textDecorationLine?:
-      | "none"
-      | "underline"
-      | "line-through"
-      | "underline line-through";
+    | "none"
+    | "underline"
+    | "line-through"
+    | "underline line-through";
     color?: ColorValue;
   };
 export type ViewProps = ThemeProps & DefaultView["props"];

@@ -63,7 +63,6 @@ export type JobsApplicationsQueryDto = GlobalQueryDto & {
 };
 
 export type NotificationsQueryDto = GlobalQueryDto & {
-  profileid?: number;
   status?: NotificationStatusType;
   type?: NotificationType;
   title?: string;

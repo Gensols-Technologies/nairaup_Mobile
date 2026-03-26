@@ -23,6 +23,7 @@ import { showCreatePostModal } from "src/components/post.create.modal";
 import {
   reduxApiRequests,
   useGetJobsApplicationsQuery,
+  useGetNotificationsCountQuery,
   useGetSavedJobsQuery,
 } from "src/services/redux/apis";
 import { useAppDispatch, useAppSelector } from "src/hooks/useReduxHooks";
@@ -99,6 +100,12 @@ export function BottomTabNavigator() {
   const { theme } = useAppTheme();
 
   const { checkJWT } = useAuth();
+
+  const { data: notificationCountData } = useGetNotificationsCountQuery({
+    status: "pending",
+    profileid: `${profile.id}`,
+  });
+  const pendingCount = notificationCountData?.data?.count ?? 0;
 
   React.useEffect(() => {
     checkJWT().then((r) => {
@@ -227,6 +234,7 @@ export function BottomTabNavigator() {
         component={NotificationsTabNavigator}
         options={({ navigation }) => ({
           tabBarLabel: "Notifications",
+          tabBarBadge: pendingCount > 0 ? pendingCount : undefined,
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
               name="notifications"

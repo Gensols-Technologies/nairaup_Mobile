@@ -18,6 +18,8 @@ import { Input } from "src/components/inputs.components";
 import { useAppTheme } from "src/providers/theme.provider";
 import useAuth from "src/hooks/apis/useAuth";
 import { useGoogle } from "src/hooks/apis/useGoogle";
+import SecureStoreManager from "src/utils/securestoremanager.utils";
+import { APP_EXPO_PUSH_TOKEN } from "src/constants/app.constants";
 
 export default function LoginScreen({
   navigation,
@@ -31,9 +33,23 @@ export default function LoginScreen({
   const { loading: loadingGoogle, signInWithGoogle } = useGoogle();
 
   const doLogin = async () => {
+    let pushnotificationtoken =
+      (await SecureStoreManager.getItemFromSecureStore(
+        `${APP_EXPO_PUSH_TOKEN}`,
+      )) || "";
+
+    // Validate push token - if it's an error message, use empty string
+    if (
+      pushnotificationtoken.includes("Error") ||
+      pushnotificationtoken.includes("not initialized")
+    ) {
+      pushnotificationtoken = "";
+    }
+
     const req = await signIn({
       username,
       password,
+      pushnotificationtoken,
     });
     if (req.code === 200)
       setTimeout(() => {

@@ -2,6 +2,7 @@ export type LoginDto = {
   username: string;
   password?: string;
   deviceid?: string;
+  pushnotificationtoken?: string;
 };
 
 export type SignUpDto = {
