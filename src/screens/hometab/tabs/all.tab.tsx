@@ -16,7 +16,8 @@ import {
   useGetJobsQuery,
 } from "src/services/redux/apis/unauth.api.requests";
 
-const HORIZONTAL_LIST_HEIGHT = fontUtils.h(200);
+const HORIZONTAL_LIST_HEIGHT = fontUtils.h(235);
+const ItemSeparator = () => <View style={{ width: fontUtils.w(16) }} />;
 
 export default function AllTabScreen({
   navigation,
@@ -98,6 +99,7 @@ export default function AllTabScreen({
           refreshControl={
             <AppRefreshControl refreshing={isFetching} onRefresh={refetch} />
           }
+          ItemSeparatorComponent={ItemSeparator}
           horizontal
           scrollEnabled={true}
         />
@@ -122,6 +124,7 @@ export default function AllTabScreen({
               onRefresh={refetchFiveStars}
             />
           }
+          ItemSeparatorComponent={ItemSeparator}
           horizontal
           scrollEnabled={true}
         />
@@ -146,6 +149,7 @@ export default function AllTabScreen({
               onRefresh={refetchShortlets}
             />
           }
+          ItemSeparatorComponent={ItemSeparator}
           horizontal
           scrollEnabled={true}
         />

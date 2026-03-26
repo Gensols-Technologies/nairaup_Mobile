@@ -228,7 +228,6 @@ export const styles = StyleSheet.create({
   ribbonStyle: {
     height: fontUtils.w(20),
     width: fontUtils.w(20),
-    marginTop: fontUtils.h(15),
   },
   ribbontWrapperStyle: {
     width: fontUtils.h(24),

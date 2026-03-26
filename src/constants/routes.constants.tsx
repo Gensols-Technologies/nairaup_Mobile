@@ -81,6 +81,14 @@ export const CommonRoutes: RenderProps[] = [
 
 export const AuthRoutes: RenderProps[] = [
   {
+    name: "LoginScreen",
+    component: LoginScreen,
+    initialParams: {},
+    options: {
+      headerShown: false,
+    },
+  },
+  {
     name: "AppBeforeAuth",
     component: HomeTabScreen,
     options: {
@@ -89,14 +97,6 @@ export const AuthRoutes: RenderProps[] = [
       headerBackVisible: false,
     },
     initialParams: {},
-  },
-  {
-    name: "LoginScreen",
-    component: LoginScreen,
-    initialParams: {},
-    options: {
-      headerShown: false,
-    },
   },
   {
     name: "ForgotPasswordScreen",
@@ -345,7 +345,7 @@ export const UserRoutes: RenderProps[] = [
             route.params.type === "job"
               ? "Create Job Listing"
               : //@ts-ignore
-                route.params.type === "apartment"
+              route.params.type === "apartment"
                 ? "Create Apartment Listing"
                 : "Create Hotel Listing"
           }
@@ -462,7 +462,7 @@ export const UserRoutes: RenderProps[] = [
         <ScreenHeader title={""} backBtnTitle={"Account Management"} />
       ),
     },
-  },                                              
+  },
   {
     name: "TransactionsScreen",
     component: TransactionsScreen,

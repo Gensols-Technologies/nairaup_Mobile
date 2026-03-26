@@ -37,10 +37,13 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import RefreshFirebaseToken from "src/components/firebase.token.refresh";
 import { SimpleImageSliderThemeProvider } from "@one-am/react-native-simple-image-slider";
 
+// Configure Google Sign-In independently of Firebase
+// Note: webClientId must match the "Web Client ID" in your Google Cloud Console project
 GoogleSignin.configure({
   webClientId:
-    "842923839141-je7la5iqamk8dhd6613a15gb1hdio9k7.apps.googleusercontent.com",
+    "182341595789-c2dsi7e3trc9e1ra4skq912c1622e1ue.apps.googleusercontent.com",
   offlineAccess: true,
+  scopes: ["profile", "email"],
 });
 
 Notifications.setNotificationHandler({

@@ -7,42 +7,27 @@ import { Button } from "src/components/buttons.components";
 import { Icon, Text, TouchableOpacity } from "src/components/themed.components";
 import { colorSuccess, colorWhite } from "src/constants/colors.constants";
 import layoutConstants from "src/constants/layout.constants";
-import useNotifications from "src/hooks/apis/useNotifications";
-import { useAppDispatch, useAppSelector } from "src/hooks/useReduxHooks";
-import { reduxApiRequests } from "src/services/redux/apis";
+import { useMarkNotificationsReadMutation } from "src/services/redux/apis";
 import { NotificationObjectType } from "src/types/notifications.types";
 import fontUtils from "src/utils/font.utils";
 
 export const NotificationItem = memo(function NotificationItem(
   data: NotificationObjectType,
 ) {
-  const dispatch = useAppDispatch();
-  const { profile } = useAppSelector((state) => state.auth.user);
-  const { markNotificationsRead } = useNotifications();
+  const [markRead] = useMarkNotificationsReadMutation();
   const [status, setStatus] = useState(data.status);
 
   const modalRef = useRef<Modalize>(null);
   const viewNotification = () => {
     modalRef.current?.open();
     if (status === "pending")
-      markNotificationsRead([data.id]).then((r) => {
-        if (r.code === 200) {
+      markRead({ ids: [data.id] }).then((r: any) => {
+        if (!r.error) {
           setStatus("read");
-          dispatch(
-            reduxApiRequests.endpoints.getNotificationsCount.initiate(
-              {
-                status: "pending",
-                //@ts-ignore
-                profileid: profile.id,
-              },
-              {
-                forceRefetch: true,
-              },
-            ),
-          );
         }
       });
   };
+
 
   return (
     <View>

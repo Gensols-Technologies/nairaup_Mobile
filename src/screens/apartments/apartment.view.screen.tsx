@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import { RootStackScreenProps } from "src/types/navigation.types";
 import {
   SafeAreaView,
-  ScrollView,
   View,
   Text,
 } from "src/components/themed.components";
@@ -226,9 +225,8 @@ export default function ApartmentViewScreen({
                 color: colorPrimary,
                 feature: `${data.address}\n${CapitalizeFirstLetter(
                   data.city,
-                )} ${
-                  data.state ? `, ${CapitalizeFirstLetter(data.state)}` : ``
-                }`,
+                )} ${data.state ? `, ${CapitalizeFirstLetter(data.state)}` : ``
+                  }`,
                 id: -1,
                 slug: "location",
               },
