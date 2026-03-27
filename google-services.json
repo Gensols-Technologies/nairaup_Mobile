@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "182341595789",
+    "project_id": "nairaup-d0d9d",
+    "storage_bucket": "nairaup-d0d9d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182341595789:android:1dc0c3be1433e7647fe8c4",
+        "android_client_info": {
+          "package_name": "com.nairaup.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5OdC9m1hzOIZRpngvRqTLuCvCrtYkISk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
